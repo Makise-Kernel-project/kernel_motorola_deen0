@@ -167,8 +167,16 @@ static void update_policy_online(void)
 	/* Re-evaluate policy to trigger adjust notifier for online CPUs */
 	get_online_cpus();
 	for_each_online_cpu(i) {
-		pr_debug("Updating policy for CPU%d\n", i);
-		cpufreq_update_policy(i);
+		/*
+		 * both clusters have synchronous cpus
+		 * no need to update the policy for each core
+		 * individually, saving at least one [down|up] write
+		 * and a [lock|unlock] irqrestore per pass
+		 */
+		if ((i & 1) == 0) {
+			pr_debug("Updating policy for CPU%d\n", i);
+			cpufreq_update_policy(i);
+		}
 	}
 	put_online_cpus();
 }
@@ -335,7 +343,7 @@ static int cpu_boost_init(void)
 	for_each_possible_cpu(cpu) {
 		s = &per_cpu(sync_info, cpu);
 		s->cpu = cpu;
-		s->input_boost_freq = 1036800;
+		s->input_boost_freq = 1401600;
 	}
 	cpufreq_register_notifier(&boost_adjust_nb, CPUFREQ_POLICY_NOTIFIER);
 	ret = input_register_handler(&cpuboost_input_handler);
