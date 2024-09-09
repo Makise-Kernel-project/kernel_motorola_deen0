@@ -82,10 +82,10 @@ static short lowmem_adj[6] = {
 };
 static int lowmem_adj_size = 4;
 static int lowmem_minfree[6] = {
-	3 * 512,	/* 6MB */
-	2 * 1024,	/* 8MB */
-	4 * 1024,	/* 16MB */
-	16 * 1024,	/* 64MB */
+	3 * 53,	/* 6MB */
+	2 * 60,	/* 8MB */
+	4 * 80,	/* 16MB */
+	16 * 151,	/* 64MB */
 };
 static int lowmem_minfree_size = 4;
 static int lmk_fast_run = 1;
@@ -851,4 +851,3 @@ module_init(lowmem_init);
 module_exit(lowmem_exit);
 
 MODULE_LICENSE("GPL");
-
